@@ -1,0 +1,75 @@
+#!/usr/bin/env sh
+
+#     os_info
+#
+# Print some useful information to the user.
+#
+# This script contains a single function declaration. It is meant to be sourced before execution.
+#
+# Print a message to the user:
+#     os_info [OPTIONS] <message>
+#
+# Print a command, then execute it:
+#     os_info [OPTIONS] run <command>
+#     os_info [OPTIONS] sudo <command>
+# When using 'run', the command is evaluated in the same shell.
+# When using 'sudo', the command is ran using sudo.
+#
+# Options (must be specified in the same order):
+#     -n                A newline character is printed before the message.
+#     --newline-before
+#     -r                Everything before the message on the same line is erased.
+#     --erase
+#     -nn               No newline character is appended at the end of the message.
+#     --no-newline-after
+#
+
+os_info() {
+	if [ "$1" = "-n" ] || [ "$1" = "--newline-before" ]; then
+		echo
+		shift
+	fi
+
+	if [ "$1" = "-r" ] || [ "$1" = "--erase" ]; then
+		# shellcheck disable=SC2039
+		echo -ne "\033[2K\r"
+		shift
+	fi
+
+	if [ "$1" = "-nn" ] || [ "$1" = "--no-newline-after" ]; then
+		os_info_params="-n"
+		shift
+	fi
+
+	if [ "$SSH_CLIENT" != "" ]; then
+		os_info_ssh_name=" ‹\e[32m$USER \e[36m$(hostname)\e[0m›"
+	fi
+
+	os_info_root_arrow="\e[31m⮕"
+	# shellcheck disable=SC2039
+	if [ "$EUID" = "0" ]; then
+		os_info_arrow=$os_info_root_arrow
+	else
+		os_info_arrow="\e[0m→"
+	fi
+
+	if [ "$1" = "run" ]; then
+		shift
+		os_info_exec="$*"
+	elif [ "$1" = "sudo" ]; then
+		shift
+		os_info_exec="sudo $*"
+		os_info_arrow=$os_info_root_arrow
+	fi
+
+	if [ "$VIRTUAL_ENV" != "" ]; then
+		os_info_arrow="⚕ $os_info_arrow"
+	fi
+
+	# shellcheck disable=SC2039
+	echo -e $os_info_params "$os_info_ssh_name $os_info_arrow \e[34m$* \e[0m"
+
+	# We explicitly do want to execute it as-is
+	# shellcheck disable=SC2086
+	eval $os_info_exec
+}
