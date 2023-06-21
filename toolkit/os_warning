@@ -1,0 +1,41 @@
+#!/usr/bin/env sh
+
+#     os_warning
+#
+# Displays a warning or an error message to the user.
+#
+# This script contains a single function declaration. It is meant to be sourced before execution.
+#
+# Usage:
+#     os_warning [OPTIONS] <message>
+#
+# Options (must be specified in the same order):
+#     --error              Displays an error instead of a warning
+#     --caller CALLER      Specify a script which will be blamed for the message
+#
+
+os_warning() {
+	if [ "$1" = "--error" ]; then
+		os_warning_color="\e[1;31m"
+		os_warning_text="ERROR"
+		shift
+	else
+		os_warning_color="\e[1;33m"
+		os_warning_text="WARNING"
+	fi
+
+	if [ "$1" = "--caller" ]; then
+		os_warning_caller="$2 "
+		shift
+		shift
+	else
+		os_warning_caller=""
+	fi
+
+	# shellcheck disable=SC2039
+	echo -e "${os_warning_color}${os_warning_caller}${os_warning_text}: \e[21m$*\e[39m"
+
+	unset os_warning_color
+	unset os_warning_caller
+	unset os_warning_text
+}
