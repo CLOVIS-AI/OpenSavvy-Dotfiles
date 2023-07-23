@@ -1,0 +1,53 @@
+#!/usr/bin/env sh
+
+#     os_require
+#
+# Checks if a program is available on this machine.
+#
+# This script contains a single function declaration. It is meant to be sourced before execution.
+#
+# Usage:
+#     os_require [--warn] [--exit exit_code] [--caller caller] <program>
+#
+# Options (must be specified in the same order):
+#     no options        If <program> is not available, prints an error message and exits with code 1
+#     --warn            Instead of printing an error message, print a warning message, and do not exit
+#     --exit exit_code  Exit with the specified error code. Incompatible with '--warn'.
+#     --caller caller   The name of the caller of this script, displayed in the message
+#     <program>         The name of the program to search for
+#
+
+os_require() {
+	if [ "$1" = "--warn" ]; then
+		os_require_warning_cmd="os_warning "
+		os_require_exit="false"
+		shift
+	else
+		os_require_warning_cmd="os_warning --error"
+		os_require_exit="1"
+	fi
+
+	if [ "$1" = "--exit" ]; then
+		os_require_exit="$2"
+		shift
+		shift
+	fi
+
+	if [ "$1" = "--caller" ]; then
+		os_require_warning_cmd="$os_require_warning_cmd --caller $2"
+		shift
+		shift
+	fi
+
+	if ! hash "$1" 2>/dev/null; then
+		# The program doesn't exist!
+		eval "$os_require_warning_cmd Missing dependency $1"
+
+		if [ ! "$os_require_exit" = "false" ]; then
+			exit "$os_require_exit"
+		fi
+	fi
+
+	unset os_require_warning_cmd
+	unset os_require_exit
+}
