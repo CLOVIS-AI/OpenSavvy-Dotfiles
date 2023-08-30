@@ -1,0 +1,10 @@
+#!/usr/bin/env sh
+
+: "${os_toolkit_path:?}"
+
+if [ -n "$ZSH_VERSION" ]; then
+	. "$os_toolkit_path/os_configure.zsh"
+else
+	# the bash script is the most likely to run on any shell, so we use it as default
+	. "$os_toolkit_path/os_configure.bash"
+fi

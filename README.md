@@ -28,6 +28,17 @@ source path_to_dotfiles/os_configure.zsh
 
 </details>
 
+## Usage in scripts
+
+Before using any of the scripts provided by this repository, you must import them.
+To do this, insert the following line at the start of your script:
+
+```shell
+. ${os_toolkit_import:?}
+```
+
+The `os_toolkit_import` variable is created by the configuration script when the toolkit is loaded.
+
 ## Contributing
 
 This project follows the OpenSavvy workflow and code conventions.
