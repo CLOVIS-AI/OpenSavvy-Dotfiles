@@ -1,0 +1,140 @@
+#!/usr/bin/env sh
+
+#     os_menu
+#
+# Ask the user to select between multiple options.
+# The user's answer is stored in the environment variable 'os_menu_answer'.
+#
+# This script contains a single function declaration. It is meant to be sourced before execution.
+#
+# Usage:
+#     os_menu [options…] <replies…>
+#
+# Options (must be specified in the same order):
+#     --title title           Add a title line.
+#     --question question     Override the "Your choice:" line.
+#     --default default       Set the default value, it must be one of the valid answers.
+#     --allow-other           Allow the user to input something else than the given responses.
+#     <replies…>              Each argument is a possible answer. Format is "NAME DESCRIPTION":
+#                             NAME:        the identifier of the answer.
+#                             DESCRIPTION: optional description to give more information about the field.
+#
+# Example
+#     os_menu --title "Are you sure you want to delete these files?" \
+#         "yes:Yes, delete everything" \
+#         "no:Cancel, delete nothing"
+#     case ${os_menu_answer} in
+#     yes)
+#         do_something
+#         ;;
+#     no)
+#         exit 0
+#         ;;
+#     esac
+#
+
+# shellcheck disable=SC2039
+
+os_menu() {
+	# region Argument management
+
+	if [ "$1" = "--title" ]; then
+		os_info "$2"
+		shift
+		shift
+	fi
+
+	if [ "$1" = "--question" ]; then
+		os_menu_question="$2"
+		shift
+		shift
+	else
+		os_menu_question="Your choice:"
+	fi
+
+	if [ "$1" = "--default" ]; then
+		os_menu_default="$2"
+		shift
+		shift
+	fi
+
+	if [ "$1" = "--allow-other" ]; then
+		os_menu_other="yes"
+		shift
+	else
+		os_menu_other="no"
+	fi
+
+	# endregion
+	# region Displaying
+
+	# SH doesn't have arrays, so we're using strings :/
+	os_menu_answers="" # all answers, line-separated
+	os_menu_number_to_answer="" # all space-separated pairs of index and answer, line-separated
+
+	i=0
+	while [ $# -gt 0 ]; do
+		os_menu_current_answer=$(echo "$1" | cut -d' ' -f1)
+		os_menu_current_description=$(echo "$1" | cut -d' ' -f2-)
+
+		os_menu_answers="$os_menu_answers\n$os_menu_current_answer"
+		os_menu_number_to_answer="$os_menu_number_to_answer\n$i $os_menu_current_answer"
+
+		if [ "$os_menu_current_answer" = "$os_menu_default" ]; then
+			echo -en "\e[1m"
+		fi
+
+		echo -e "$i. $os_menu_current_answer • $os_menu_current_description\e[0m"
+
+		i=$((i + 1))
+		shift
+	done
+
+	if [ ! "$os_menu_default" = "" ]; then
+		os_menu_question="$os_menu_question ($os_menu_default)"
+	fi
+
+	os_info --no-newline-after "$os_menu_question"
+
+	# endregion
+	# region Analyzing the answer
+
+	os_menu_answer="" # will store the final answer, the only variable not to be unset
+
+	while [ "$os_menu_answer" = "" ]; do
+		read -r os_menu_answer_attempt
+		os_menu_answer_attempt=${os_menu_answer_attempt:-$os_menu_default}
+
+		if [ ! "$os_menu_answer_attempt" = "" ]; then
+			# Did the user type one of the answers directly?
+			if echo "$os_menu_answers" | grep "$os_menu_answer_attempt" >/dev/null 2>&1; then
+				os_menu_answer="$os_menu_answer_attempt"
+				break
+			fi
+
+			# Did the user type one of the answer index?
+			os_menu_answer=$(echo "$os_menu_number_to_answer" | grep "^$os_menu_answer_attempt" | cut -d' ' -f2)
+			if [ ! "$os_menu_answer" = "" ]; then
+				break
+			fi
+
+			# Is the user allowed to type something else entirely?
+			if [ $os_menu_other = "yes" ]; then
+				os_menu_answer=$os_menu_answer_attempt
+				break
+			fi
+		fi
+
+		echo -n "Invalid answer, please try again: "
+	done
+
+	# endregion
+
+	unset os_menu_question
+	unset os_menu_default
+	unset os_menu_other
+	unset os_menu_answers
+	unset os_menu_current_answer
+	unset os_menu_current_description
+	unset os_menu_answer_attempt
+}
