@@ -7,19 +7,26 @@ Repository architecture:
 
 ## Configuration
 
-Replace `path_to_dotfiles` by the path to the directory where you installed this project.
+Click on your favorite shell to expand the configuration information.
 
-Bash:
+<details>
+<summary>Bash</summary>
+
 ```shell
-# ~/.bashrc
+# Add to your ~/.bashrc
 source path_to_dotfiles/os_configure.bash
 ```
 
-Zsh:
+</details>
+<details>
+<summary>Zsh</summary>
+
 ```shell
-# ~/.zshrc
+# Add to your ~/.zshrc
 source path_to_dotfiles/os_configure.zsh
 ```
+
+</details>
 
 ## Contributing
 
