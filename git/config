@@ -2,5 +2,7 @@
     autocrlf = input
 [fetch]
     recurseSubmodules = on-demand
+    parallel = 0
+    prune = true
 [push]
     recurseSubmodules = check
