@@ -6,3 +6,6 @@
     prune = true
 [push]
     recurseSubmodules = check
+[rebase]
+	autoStash = true
+	missingCommitsCheck = error
