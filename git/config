@@ -1,2 +1,6 @@
 [core]
     autocrlf = input
+[fetch]
+    recurseSubmodules = on-demand
+[push]
+    recurseSubmodules = check
