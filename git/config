@@ -9,3 +9,59 @@
 [rebase]
 	autoStash = true
 	missingCommitsCheck = error
+[alias]
+	aliases = config --get-regexp ^alias\\.
+	p = pull --ff-only --no-rebase
+	pl = pull
+	pr = pull --rebase=interactive
+	pm = pull --no-rebase --no-ff
+	ps = push
+	psf = push -f
+	psu = push --set-upstream
+	st = status -sb --untracked=all
+	sta = status
+	sw = switch
+	c = commit
+	cm = commit -m
+	ca = commit --amend
+	a = add
+	ap = add --patch
+	ai = add --interactive
+	add-new-files = add --intent-to-add
+	anf = add --intent-to-add
+	f = fetch
+	fr = fetch --all
+	b = branch
+	ba = switch -c
+	bu = branch -u
+	bl = branch -vv
+	bd = branch -d
+	bdr = push -d
+	bla = branch -vva
+	d = diff --submodule=diff
+	dc = diff --staged --submodule=diff
+	ds = diff --staged --submodule=diff
+	s = show --show-signature
+	unstage = restore --staged
+	get-stage = restore --worktree
+	rollback = restore --worktree --staged
+	authors = shortlog -sn --no-merges
+	committers = shortlog -esnc --no-merges
+	tags = tag --list --sort=-committerdate -n1
+	hide = update-index --assume-unchanged
+	unhide = update-index --no-assume-unchanged
+	hidden = ls-files -v | grep "^[a-z]"
+	cp = cherry-pick
+	rebase-me = !git rebase -i `git merge-base HEAD master`
+	sub = submodule
+	subi = submodule update --init --recursive
+	r = remote
+	rr = remote rename
+	ra = rebase --abort
+	rc = rebase --continue
+	rs = rebase --skip
+	ma = merge --abort
+	cpa = cherry-pick --abort
+	why-ignore = check-ignore -v --no-index
+	rss = reset --soft
+	rsh = reset --hard
