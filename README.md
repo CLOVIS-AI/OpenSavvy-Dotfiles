@@ -20,3 +20,10 @@ Zsh:
 # ~/.zshrc
 source path_to_dotfiles/os_configure.zsh
 ```
+
+## Contributing
+
+This project follows the OpenSavvy workflow and code conventions.
+To learn how to contribute, please read [our wiki](https://gitlab.com/opensavvy/wiki/-/blob/main/README.md).
+
+This project also uses the [OpenSavvy Playground](docs/playground/README.md).
