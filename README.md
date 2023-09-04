@@ -7,19 +7,37 @@ Repository architecture:
 
 ## Configuration
 
-Replace `path_to_dotfiles` by the path to the directory where you installed this project.
+Click on your favorite shell to expand the configuration information.
 
-Bash:
+<details>
+<summary>Bash</summary>
+
 ```shell
-# ~/.bashrc
+# Add to your ~/.bashrc
 source path_to_dotfiles/os_configure.bash
 ```
 
-Zsh:
+</details>
+<details>
+<summary>Zsh</summary>
+
 ```shell
-# ~/.zshrc
+# Add to your ~/.zshrc
 source path_to_dotfiles/os_configure.zsh
 ```
+
+</details>
+
+## Usage in scripts
+
+Before using any of the scripts provided by this repository, you must import them.
+To do this, insert the following line at the start of your script:
+
+```shell
+. ${os_toolkit_import:?}
+```
+
+The `os_toolkit_import` variable is created by the configuration script when the toolkit is loaded.
 
 ## Contributing
 
