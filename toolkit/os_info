@@ -72,4 +72,6 @@ os_info() {
 	# We explicitly do want to execute it as-is
 	# shellcheck disable=SC2086
 	eval $os_info_exec
+
+	unset os_info_params os_info_ssh_name os_info_arrow os_info_exec
 }
