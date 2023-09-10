@@ -65,3 +65,4 @@
 	why-ignore = check-ignore -v --no-index
 	rss = reset --soft
 	rsh = reset --hard
+	changelog = !. ${os_toolkit_import:?} && os_kotlin $os_toolkit_path/git/kotlin/changelog.main.kts
