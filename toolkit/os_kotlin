@@ -1,0 +1,61 @@
+#!/usr/bin/env sh
+
+#     os_kotlin
+#
+# Ensures the Kotlin compiler is available, in order to run scripts.
+#
+# If the Kotlin compiler isn't available, the script installs it either through Packager or SDKMAN, depending on what
+# is installed on the system.
+#
+# Usage:
+#     os_kotlin <script> <args given to the script>
+#
+
+# shellcheck disable=SC1090
+os_kotlin_sdkman() {
+	sdkman_init="$HOME/.sdkman/bin/sdkman-init.sh"
+
+	if hash sdk; then
+		echo "SDKMAN is already active…"
+	elif [ -f "$sdkman_init" ]; then
+		echo "Activating SDKMAN…"
+		. "$sdkman_init"
+	else
+		echo "Installing SDKMAN…"
+		os_require --caller 'os_kotlin' curl
+		os_require --caller 'os_kotlin' zip
+		os_require --caller 'os_kotlin' unzip
+
+		curl -L "https://get.sdkman.io" | bash
+		. "$sdkman_init"
+	fi
+
+	if ! hash java; then
+		os_info run sdk install java
+	fi
+
+	os_info run sdk install kotlin
+}
+
+os_kotlin() {
+	os_kotlin_script="$1"
+	shift
+
+	if ! hash kotlin 2>/dev/null; then
+		echo "Kotlin is not installed…"
+
+		if [ -t 0 ]; then
+			# Running in an interactive terminal…
+			if hash packager 2>/dev/null; then
+				packager install kotlin
+			else
+				os_kotlin_sdkman
+			fi
+		else
+			os_kotlin_sdkman
+		fi
+	fi
+
+	kotlin "$os_kotlin_script" "$@"
+	unset os_kotlin_script
+}
