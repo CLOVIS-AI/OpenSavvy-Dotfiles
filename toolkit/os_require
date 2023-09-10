@@ -43,6 +43,10 @@ os_require() {
 		# The program doesn't exist!
 		eval "$os_require_warning_cmd Missing dependency $1"
 
+		if hash packager 2>/dev/null; then
+			packager install "$1" && return
+		fi
+
 		if [ ! "$os_require_exit" = "false" ]; then
 			exit "$os_require_exit"
 		fi
