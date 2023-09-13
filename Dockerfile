@@ -8,3 +8,5 @@ COPY . /opt/opensavvy/dotfiles
 WORKDIR /root
 RUN echo "source /opt/opensavvy/dotfiles/os_configure.bash" >>.bashrc
 RUN echo "source /opt/opensavvy/dotfiles/os_configure.zsh" >>.zshrc
+RUN echo "[include]" >>.gitconfig
+RUN echo "	path = /opt/opensavvy/dotfiles/git/config" >>.gitconfig
