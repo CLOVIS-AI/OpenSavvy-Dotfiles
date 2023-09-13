@@ -4,6 +4,7 @@ Collection of scripts and CLI utilities used by the OpenSavvy team.
 
 Repository architecture:
 - [toolkit](toolkit/README.md): generic utilities for writing shell scripts
+- [git](git/README.md): git utilities and scripts
 
 ## Configuration
 
