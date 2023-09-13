@@ -113,7 +113,7 @@ os_menu() {
 			fi
 
 			# Did the user type one of the answer index?
-			os_menu_answer=$(echo "$os_menu_number_to_answer" | grep "^$os_menu_answer_attempt" | cut -d' ' -f2)
+			os_menu_answer=$(echo -e "$os_menu_number_to_answer" | grep "^$os_menu_answer_attempt" | cut -d' ' -f2)
 			if [ ! "$os_menu_answer" = "" ]; then
 				break
 			fi
