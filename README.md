@@ -40,6 +40,10 @@ To do this, insert the following line at the start of your script:
 
 The `os_toolkit_import` variable is created by the configuration script when the toolkit is loaded.
 
+## License
+
+This project is licensed under the [Apache 2.0 license](LICENSE).
+
 ## Contributing
 
 This project follows the OpenSavvy workflow and code conventions.
