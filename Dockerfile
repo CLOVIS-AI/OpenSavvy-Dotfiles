@@ -1,6 +1,6 @@
 FROM archlinux:latest
 
-RUN pacman -Syuu --noconfirm jre-openjdk-headless kotlin git
+RUN pacman -Syuu --noconfirm kotlin git
 
 COPY . /opt/opensavvy/dotfiles
 
