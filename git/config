@@ -50,7 +50,7 @@
 	tags = tag --list --sort=-committerdate -n1
 	hide = update-index --assume-unchanged
 	unhide = update-index --no-assume-unchanged
-	hidden = ls-files -v | grep "^[a-z]"
+	hidden = ! git ls-files -v | grep '^[a-z]'
 	cp = cherry-pick
 	rebase-me = !git rebase -i `git merge-base HEAD master`
 	sub = submodule
