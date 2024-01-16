@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
-export os_toolkit_path="$(dirname "$BASH_SOURCE")"
+# See https://stackoverflow.com/a/246128
+export os_toolkit_path=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" &>/dev/null && pwd)
 
 # Toolkit
 source "$os_toolkit_path/toolkit/os_info"
