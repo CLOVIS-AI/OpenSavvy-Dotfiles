@@ -1,0 +1,55 @@
+#!/usr/bin/env sh
+
+#     os_info_telegram
+#
+# Sends a message to Telegram.
+#
+# This script contains a single function declaration. It is meant to be sourced before execution.
+#
+# Usage:
+#     os_info_telegram <message_file> <chats_file>
+#
+# Options (must be specified in the same order):
+#     <message_file>    A file with the message to send, encoded in the HTML format.
+#     <chats_file>      A file with the IDs of chats the message should be sent to (one ID per line)
+#
+# Environment variables:
+#     BOT_TOKEN         The token to connect to the Bot API
+#
+
+os_info_telegram() {
+	if [ $# != 2 ]; then
+		os_warning --error --caller os_info_telegram "Expected 2 arguments: a file with the message, and a file with the list of chats."
+		return 1
+	fi
+
+	if [ ! -f "$1" ]; then
+		os_warning --error --caller os_info_telegram "File $1 doesn't exist."
+		return 1
+	fi
+
+	if [ ! -f "$2" ]; then
+		os_warning --error --caller os_info_telegram "File $2 doesn't exist."
+		return 1
+	fi
+
+	if [ "${BOT_TOKEN:-undefined}" = undefined ]; then
+		os_warning --error --caller os_info_telegram "Missing BOT_TOKEN"
+		return 1
+	fi
+
+	os_info "Sending message to the $(wc <"$2" -w) chats found."
+	echo "START OF MESSAGE"
+	cat "$1"
+	echo "END OF MESSAGE"
+
+	# shellcheck disable=SC2013
+	for CHAT_ID in $(cat "$2"); do
+		echo "Sending to $CHAT_ID"
+		curl -v \
+			--data-urlencode "parse_mode=html" \
+			--data-urlencode "chat_id=${CHAT_ID}" \
+			--data-urlencode "text=$(cat "$1")" \
+			"https://api.telegram.org/bot${BOT_TOKEN}/sendMessage"
+	done
+}

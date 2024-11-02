@@ -5,6 +5,7 @@ export os_toolkit_path=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" &>/dev/null &
 
 # Toolkit
 source "$os_toolkit_path/toolkit/os_info"
+source "$os_toolkit_path/toolkit/os_info_telegram"
 source "$os_toolkit_path/toolkit/os_warning"
 source "$os_toolkit_path/toolkit/os_menu"
 source "$os_toolkit_path/toolkit/os_require"
