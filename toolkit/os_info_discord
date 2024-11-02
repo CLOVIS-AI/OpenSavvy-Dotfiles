@@ -1,0 +1,35 @@
+#!/usr/bin/env sh
+
+#     os_info_discord
+#
+# Sends a message to Discord.
+#
+# This script contains a single function declaration. It is meant to be sourced before execution.
+#
+# Usage:
+#     os_info_discord <message_file> <chat> <token>
+#
+# Options (must be specified in the same order):
+#     <message_file>    A file with the message to send, encoded in the JSON format.
+#     <chat>            The ID of the chat to send the message to.
+#     <token>           The token for the Bot webhook.
+#
+
+os_info_discord() {
+	if [ $# != 3 ]; then
+		os_warning --error --caller os_info_discord "Expected 3 arguments"
+		return 1
+	fi
+
+	if [ ! -f "$1" ]; then
+		os_warning --error --caller os_info_discord "File $1 doesn't exist."
+		return 1
+	fi
+
+	os_info "Sending message:"
+	echo "START OF MESSAGE"
+	cat "$1"
+	echo "END OF MESSAGE"
+
+	curl -v "https://discord.com/api/webhooks/$3/$2" -X POST -m 10000 -H "Content-Type: application/json" -d "@$1"
+}
