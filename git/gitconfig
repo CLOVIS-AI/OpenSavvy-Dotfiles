@@ -1,11 +1,11 @@
 [core]
-    autocrlf = input
+	autocrlf = input
 [fetch]
-    recurseSubmodules = on-demand
-    parallel = 0
-    prune = true
+	recurseSubmodules = on-demand
+	parallel = 0
+	prune = true
 [push]
-    recurseSubmodules = check
+	recurseSubmodules = check
 [rebase]
 	autoStash = true
 	missingCommitsCheck = error
